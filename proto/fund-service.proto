@@ -1,0 +1,17 @@
+syntax = "proto3";
+package fund_service.proto;
+
+option go_package = "github.com/tessellated-io/mail-in-rebate/paymaster/server/proto";
+
+// TODO: Support enums in this class.
+
+message FundingRequest {
+  string address = 1;
+  string addressPrefix = 2;
+}
+
+message FundingResponse {}
+
+service FundingService {
+  rpc fund(FundingRequest) returns (FundingResponse);
+}
