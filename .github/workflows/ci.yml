@@ -16,7 +16,7 @@ jobs:
       matrix:
         make_action: ["build", "lint"]
     runs-on: ubuntu-latest  
-    name: "${{matrix.make_action}} restake-go"
+    name: "${{matrix.make_action}} Paymaster"
     steps:
       - uses: actions/checkout@v3
       - name: Setup Go
