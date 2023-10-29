@@ -7,15 +7,15 @@ import (
 	"net/http"
 	"strings"
 
+	ibctypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
+	"github.com/tessellated-io/mail-in-rebates/paymaster/crypto"
+	"github.com/tessellated-io/pickaxe/chains"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdc "github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	ibctypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
-
-	"github.com/tessellated-io/mail-in-rebates/paymaster/crypto"
-	"github.com/tessellated-io/pickaxe/chains"
 )
 
 type SkipClient struct {
@@ -133,7 +133,6 @@ func (sc *SkipClient) getMessages(
 	for chainIDIdx, chainID := range chainIDs {
 		prefix := sc.registry.ChainIDToData[chainID].AccountPrefix
 		address, err := crypto.PubKeyToAddress(senderPublicKey, prefix)
-
 		if err != nil {
 			return nil, err
 		}
@@ -220,8 +219,7 @@ func (sc *SkipClient) getRoute(
 ) (*RouteResponse, error) {
 	url := "https://api.skip.money/v1/fungible/route"
 
-	payload :=
-		fmt.Sprintf(`
+	payload := fmt.Sprintf(`
 		{
 			"amount_in": "%s",
 			"source_asset_denom": "%s",
@@ -230,12 +228,12 @@ func (sc *SkipClient) getRoute(
 			"dest_asset_chain_id": "%s",
 			"cumulative_affiliate_fee_bps": "0"
 		}`,
-			amountIn,
-			denomIn,
-			sourceChainID,
-			destDenom,
-			destChainID,
-		)
+		amountIn,
+		denomIn,
+		sourceChainID,
+		destDenom,
+		destChainID,
+	)
 	fmt.Printf("Payload for routes: %s\n", payload)
 
 	req, err := http.NewRequest("POST", url, strings.NewReader(payload))

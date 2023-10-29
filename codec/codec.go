@@ -3,13 +3,13 @@ package codec
 import (
 	"sync"
 
+	ibc "github.com/cosmos/ibc-go/v7/modules/core/types"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/codec"
-
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	ibc "github.com/cosmos/ibc-go/v7/modules/core/types"
 )
 
 // Provides a singleton codec that can be used across the application
