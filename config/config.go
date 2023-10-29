@@ -17,6 +17,7 @@ type GlobalConfig struct {
 }
 
 type AccountConfig struct {
+	ChainID string
 	Address string
 	MinCoin sdk.Coin
 

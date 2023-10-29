@@ -5,10 +5,13 @@ import (
 	"fmt"
 	"time"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/tessellated-io/mail-in-rebates/paymaster/config"
 	"github.com/tessellated-io/pickaxe/cosmos/rpc"
+	"github.com/tessellated-io/pickaxe/log"
 	r "github.com/tessellated-io/router/router"
+
+	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // TODO: Lock on addresses to prevent multi thread attacks
@@ -25,32 +28,41 @@ type bursar struct {
 	// Map of address to last successful send time.
 	// TODO: Move this to persistence
 	rateLimitTracker map[string]time.Time
+
+	cdc *codec.ProtoCodec
+	log log.Logger
 }
 
 // Ensure bursar is a Bursar
 var _ Bursar = (*bursar)(nil)
 
-func NewBursar(accounts []*config.AccountConfig) (Bursar, error) {
+func NewBursar(accounts []*config.AccountConfig, router r.Router, cdc *codec.ProtoCodec, log log.Logger) (Bursar, error) {
 	return &bursar{
 		accounts:         accounts,
 		rateLimitTracker: make(map[string]time.Time),
+		router:           router,
+		cdc:              cdc,
+		log:              log,
 	}, nil
 }
 
 // Bursar Interface
 
 // TODO: Add logging
-func (b *bursar) PollForTopUps(ctx context.Context) {
+func (b *bursar) PollForTopUps(ctx context.Context) error {
 	for _, account := range b.accounts {
 		// TODO: Incorporate router
 
 		// Create a gRPC client
 		// TODO: We can probably create these up front to avoid connection overhead
-		endpoint, err := b.router.GetGrpcEndpoint()
+		grpcEndpoint, err := b.router.GetGrpcEndpoint(account.ChainID)
 		if err != nil {
 			return nil
 		}
-		rpcClient := rpc.NewGRpcClient())
+		rpcClient, err := rpc.NewGRpcClient(grpcEndpoint, b.cdc, &b.log)
+		if err != nil {
+			return nil
+		}
 
 		// TODO: retries
 		balance, err := rpcClient.GetBalance(ctx, account.Address, account.MinCoin.Denom)
@@ -59,13 +71,16 @@ func (b *bursar) PollForTopUps(ctx context.Context) {
 		}
 
 		// Check balance
-		if balance.LessThank(account.MinCoin.Amount) {
+		if balance.IsLT(account.MinCoin) {
 			txHash, err := b.SendFunds(account.TopUpAmount, account.Address, account.RateLimit)
 			if err != nil {
 				return err
 			}
+			b.log.Info().Str("tx_hash", txHash).Str("target_address", account.Address).Msg(fmt.Sprintf("sent %s%s", account.TopUpAmount.Amount, account.TopUpAmount.Denom))
 		}
+		// TODO: Log?
 	}
+	return nil
 }
 
 // TODO: Public?
