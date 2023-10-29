@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"github.com/spf13/cobra"
@@ -31,7 +31,11 @@ var rootCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
-		addressTracker.AddAddress("Test test")
+		// TODO: Remove?
+		err = addressTracker.AddAddress("Test test")
+		if err != nil {
+			panic(err)
+		}
 
 		bursar := bursar.NewBursar(
 			cdc,
@@ -46,8 +50,4 @@ var rootCmd = &cobra.Command{
 func init() {
 	// Define the 'port' flag and set it as optional
 	rootCmd.Flags().Int("port", 8080, "Port number (optional)")
-}
-
-func main() {
-	rootCmd.Execute()
 }

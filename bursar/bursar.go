@@ -1,24 +1,21 @@
 package bursar
 
 import (
-	"encoding/hex"
 	"fmt"
-	"strings"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-
+	"github.com/tessellated-io/mail-in-rebates/paymaster/crypto"
+	"github.com/tessellated-io/mail-in-rebates/paymaster/skip"
 	"github.com/tessellated-io/pickaxe/arrays"
+	"github.com/tessellated-io/pickaxe/chains"
 	"github.com/tessellated-io/pickaxe/coding"
+	pacrypto "github.com/tessellated-io/pickaxe/crypto"
+	"github.com/tessellated-io/pickaxe/tx"
 
+	"github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/crypto"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/skip"
-	"github.com/tessellated-io/pickaxe/chains"
-	pacrypto "github.com/tessellated-io/pickaxe/crypto"
-	"github.com/tessellated-io/pickaxe/tx"
 )
 
 // Time between disbursement
@@ -76,10 +73,10 @@ func NewBursar(
 	}
 }
 
-//==============
+// ==============
 // PUBLIC API
 
-func (b *Bursar) SendFunds(targetAddress string, prefix string) (string, error) {
+func (b *Bursar) SendFunds(targetAddress, prefix string) (string, error) {
 	// Auth checks
 	// 1. Is known address
 	// if !b.isKnownAddress(targetAddress, prefix) {
@@ -144,7 +141,7 @@ func (b *Bursar) SendFunds(targetAddress string, prefix string) (string, error) 
 	return "", fmt.Errorf("failed to send for height %d. Error: %s", 123, grpcRes.TxResponse.RawLog)
 }
 
-//==============
+// ==============
 // HELPERS
 
 // Check that we haven't sent funds recently.
@@ -160,23 +157,24 @@ func (b *Bursar) isInCooldown(address string) bool {
 	return now.Before(nextDisburment)
 }
 
-// Usage: isKnownAddress("osmo15qth07rmamcue638q4fvzfrg9ra6eyknqh3jmc", "osmo")
-func (b *Bursar) isKnownAddress(addressToCheck string, prefix string) bool {
-	for _, knownPublicKey := range b.knownPublicKeys {
-		computedAddress, err := crypto.PubKeyToAddress(knownPublicKey, prefix)
-		if err != nil {
-			fmt.Printf(
-				"Warning: Could not formulate an address for public key and prefix, skipping. Error: %s (pub_key_hex=%s, prefix=%s)",
-				err,
-				hex.EncodeToString(knownPublicKey.Bytes()),
-				prefix,
-			)
-			continue
-		}
+// TODO
+// // Usage: isKnownAddress("osmo15qth07rmamcue638q4fvzfrg9ra6eyknqh3jmc", "osmo")
+// func (b *Bursar) isKnownAddress(addressToCheck, prefix string) bool {
+// 	for _, knownPublicKey := range b.knownPublicKeys {
+// 		computedAddress, err := crypto.PubKeyToAddress(knownPublicKey, prefix)
+// 		if err != nil {
+// 			fmt.Printf(
+// 				"Warning: Could not formulate an address for public key and prefix, skipping. Error: %s (pub_key_hex=%s, prefix=%s)",
+// 				err,
+// 				hex.EncodeToString(knownPublicKey.Bytes()),
+// 				prefix,
+// 			)
+// 			continue
+// 		}
 
-		if strings.EqualFold(computedAddress, addressToCheck) {
-			return true
-		}
-	}
-	return false
-}
+// 		if strings.EqualFold(computedAddress, addressToCheck) {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }

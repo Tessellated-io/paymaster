@@ -11,7 +11,6 @@ import (
 	"github.com/tessellated-io/mail-in-rebates/paymaster/crypto"
 	"github.com/tessellated-io/pickaxe/chains"
 
-	"github.com/cosmos/cosmos-sdk/codec"
 	cdc "github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,12 +19,12 @@ import (
 
 type SkipClient struct {
 	registry *chains.OfflineChainRegistry
-	cdc      *codec.ProtoCodec
+	cdc      *cdc.ProtoCodec
 }
 
 func NewSkipClient(
 	registry *chains.OfflineChainRegistry,
-	cdc *codec.ProtoCodec,
+	cdc *cdc.ProtoCodec,
 ) *SkipClient {
 	return &SkipClient{
 		registry: registry,
@@ -92,7 +91,11 @@ func (sc *SkipClient) GetMessages(
 
 	if msgType == "/ibc.applications.transfer.v1.MsgTransfer" {
 		msg := ibctypes.MsgTransfer{}
-		cdc.JSONCodec.UnmarshalJSON(&cdc.ProtoCodec{}, []byte(msgJson), &msg)
+		err := cdc.JSONCodec.UnmarshalJSON(&cdc.ProtoCodec{}, []byte(msgJson), &msg)
+		if err != nil {
+			return nil, err
+		}
+
 		return &msg, nil
 	}
 

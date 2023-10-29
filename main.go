@@ -4,14 +4,15 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 	"github.com/tessellated-io/mail-in-rebates/paymaster/codec"
 	"github.com/tessellated-io/mail-in-rebates/paymaster/crypto"
 	"github.com/tessellated-io/mail-in-rebates/paymaster/skip"
 	"github.com/tessellated-io/pickaxe/chains"
 	pacrypto "github.com/tessellated-io/pickaxe/crypto"
 	"github.com/tessellated-io/pickaxe/tx"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 )
 
 func main() {
