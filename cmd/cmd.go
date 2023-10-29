@@ -11,6 +11,8 @@ import (
 	pacrypto "github.com/tessellated-io/pickaxe/crypto"
 )
 
+// TODO: Separate these out into different commands
+// TODO: Enable persistence on state.
 var rootCmd = &cobra.Command{
 	Use:   "paymaster",
 	Short: "Paymaster helps distribute payments to crypto wallets",
