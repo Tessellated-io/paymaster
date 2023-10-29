@@ -1,18 +1,27 @@
 package bursar2
 
 import (
+	"context"
 	"fmt"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tessellated-io/mail-in-rebates/paymaster/config"
+	"github.com/tessellated-io/pickaxe/cosmos/rpc"
+	r "github.com/tessellated-io/router/router"
 )
 
 // TODO: Lock on addresses to prevent multi thread attacks
 // TODO: package name
 
+// Bursar implements information for polling account balances and disbursing funds.
 type Bursar interface{}
 
 type bursar struct {
+	// Configs for accounts to check.
+	accounts []*config.AccountConfig
+	router   r.Router
+
 	// Map of address to last successful send time.
 	// TODO: Move this to persistence
 	rateLimitTracker map[string]time.Time
@@ -21,12 +30,45 @@ type bursar struct {
 // Ensure bursar is a Bursar
 var _ Bursar = (*bursar)(nil)
 
-func NewBursar() (Bursar, error) {
-	return &bursar{}, nil
+func NewBursar(accounts []*config.AccountConfig) (Bursar, error) {
+	return &bursar{
+		accounts:         accounts,
+		rateLimitTracker: make(map[string]time.Time),
+	}, nil
 }
 
 // Bursar Interface
 
+// TODO: Add logging
+func (b *bursar) PollForTopUps(ctx context.Context) {
+	for _, account := range b.accounts {
+		// TODO: Incorporate router
+
+		// Create a gRPC client
+		// TODO: We can probably create these up front to avoid connection overhead
+		endpoint, err := b.router.GetGrpcEndpoint()
+		if err != nil {
+			return nil
+		}
+		rpcClient := rpc.NewGRpcClient())
+
+		// TODO: retries
+		balance, err := rpcClient.GetBalance(ctx, account.Address, account.MinCoin.Denom)
+		if err != nil {
+			return err
+		}
+
+		// Check balance
+		if balance.LessThank(account.MinCoin.Amount) {
+			txHash, err := b.SendFunds(account.TopUpAmount, account.Address, account.RateLimit)
+			if err != nil {
+				return err
+			}
+		}
+	}
+}
+
+// TODO: Public?
 // SendFunds sends the given funds to the given address while respecting the rate limiting timer, returning a transaction hash or an error.
 func (b *bursar) SendFunds(amount sdk.Coin, address string, rateLimit time.Duration) (string, error) {
 	// Ensure we are not rate limited
