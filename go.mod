@@ -7,7 +7,7 @@ require (
 	github.com/cosmos/ibc-go/v7 v7.2.1-0.20230829085526-4d114bd09096
 	github.com/gogo/protobuf v1.3.2
 	github.com/spf13/cobra v1.7.0
-	github.com/tessellated-io/pickaxe v1.0.4
+	github.com/tessellated-io/pickaxe v1.0.6
 	google.golang.org/grpc v1.56.2
 )
 
