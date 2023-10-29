@@ -4,14 +4,15 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 	"github.com/tessellated-io/mail-in-rebates/paymaster/codec"
 	"github.com/tessellated-io/mail-in-rebates/paymaster/crypto"
 	"github.com/tessellated-io/mail-in-rebates/paymaster/skip"
 	"github.com/tessellated-io/pickaxe/chains"
 	pacrypto "github.com/tessellated-io/pickaxe/crypto"
 	"github.com/tessellated-io/pickaxe/tx"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 )
 
 func main() {
@@ -42,7 +43,7 @@ func main() {
 
 	// Get a signer
 	mnemonic := "TODO"
-	keyPair := pacrypto.NewKeyPairFromMnemonic(mnemonic)
+	keyPair := pacrypto.NewCosmosKeyPairFromMnemonic(mnemonic)
 
 	grpcRes, err := tx.SendMessages(
 		[]sdk.Msg{ibcXferMessage},
@@ -53,6 +54,8 @@ func main() {
 		txtypes.BroadcastMode_BROADCAST_MODE_SYNC,
 		"cosmos-validator.tessageo.net:9090",
 		1.1,
+		0.0, // TODO
+		"TODO",
 	)
 	if err != nil {
 		panic(err)

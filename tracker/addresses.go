@@ -2,6 +2,7 @@ package tracker
 
 import (
 	"encoding/csv"
+	"fmt"
 	"os"
 )
 
@@ -10,24 +11,30 @@ type AddressTracker struct {
 	file      string
 }
 
-func NewAddressTracker(file string) *AddressTracker {
+func NewAddressTracker(file string) (*AddressTracker, error) {
 	a := &AddressTracker{
 		addresses: make(map[string]bool),
 		file:      file,
 	}
-	a.loadFromFile()
+	err := a.loadFromFile()
+	if err != nil {
+		return nil, err
+	}
 
-	return a
+	return a, nil
 }
 
-func (a *AddressTracker) AddAddress(address string) bool {
+func (a *AddressTracker) AddAddress(address string) error {
 	if _, exists := a.addresses[address]; exists {
-		return false // String already exists
+		return fmt.Errorf("address already exists: %s", address)
 	}
 	a.addresses[address] = true
-	a.saveToFile()
+	err := a.saveToFile()
+	if err != nil {
+		return err
+	}
 
-	return true
+	return nil
 }
 
 func (a *AddressTracker) saveToFile() error {
@@ -41,7 +48,10 @@ func (a *AddressTracker) saveToFile() error {
 	defer writer.Flush()
 
 	for str := range a.addresses {
-		writer.Write([]string{str})
+		err := writer.Write([]string{str})
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
