@@ -19,15 +19,15 @@ type UserConfig struct {
 // UserAccountConfig is configuration for an account to monitor.
 type UserAccountConfig struct {
 	// Where to find data
-	ChainID string
-	Grpc    string
+	ChainID string `yaml:"chainID"`
+	Grpc    string `yaml:"grpc"`
 
 	// What address do I care about
-	Address   string
-	Denom     string
-	MinAmount json.Number
+	Address   string      `yaml:"address"`
+	Denom     string      `yaml:"denom"`
+	MinAmount json.Number `yaml:"minAmount"`
 
 	// Payout configurations
-	topUpAmount      json.Number
-	rateLimitSeconds int
+	TopUpAmount      json.Number `yaml:"topUpAmount"`
+	RateLimitSeconds int         `yaml:"rateLimitSeconds"`
 }

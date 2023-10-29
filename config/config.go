@@ -5,28 +5,27 @@ import (
 	"log"
 	"time"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/tessellated-io/pickaxe/util"
-	"github.com/tessellated-io/router/router"
 	r "github.com/tessellated-io/router/router"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 type GlobalConfig struct {
-	Mnemonic           string
-	RunIntervalSeconds time.Duration
+	Mnemonic    string
+	RunInterval time.Duration
 }
 
 type AccountConfig struct {
 	Address string
-	minCoin sdk.Coin
+	MinCoin sdk.Coin
 
-	topUpAmount sdk.Coin
+	TopUpAmount sdk.Coin
 
-	rateLimiteSeconds time.Duration
+	RateLimit time.Duration
 }
 
-func GetConfig(ctx context.Context, filename string, log *log.Logger) (*GlobalConfig, []*AccountConfig, router.Router, error) {
+func GetConfig(ctx context.Context, filename string, log *log.Logger) (*GlobalConfig, []*AccountConfig, r.Router, error) {
 	// Get data from the file
 	fileConfig, err := parseConfig(filename)
 	if err != nil {
@@ -35,12 +34,12 @@ func GetConfig(ctx context.Context, filename string, log *log.Logger) (*GlobalCo
 
 	// Create a global config
 	globalConfig := &GlobalConfig{
-		Mnemonic:           fileConfig.Mnemonic,
-		RunIntervalSeconds: time.Duration(fileConfig.RunIntervalSeconds) * time.Second,
+		Mnemonic:    fileConfig.Mnemonic,
+		RunInterval: time.Duration(fileConfig.RunIntervalSeconds) * time.Second,
 	}
 
 	// Create and route account configs for each account
-	router, err := router.NewRouter(nil)
+	router, err := r.NewRouter(nil)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -51,11 +50,21 @@ func GetConfig(ctx context.Context, filename string, log *log.Logger) (*GlobalCo
 		if err != nil {
 			return nil, nil, nil, err
 		}
-		minCoin := sdk.NewCoin(fileAccountConfig.Denom, minAmount)
+		minCoin := sdk.NewCoin(fileAccountConfig.Denom, sdk.NewIntFromBigInt(minAmount))
+
+		topUpAmount, err := util.NumberToBigInt(fileAccountConfig.TopUpAmount)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+		topUpCoin := sdk.NewCoin(fileAccountConfig.Denom, sdk.NewIntFromBigInt(topUpAmount))
+
+		rateLimit := time.Duration(fileAccountConfig.RateLimitSeconds) * time.Second
 
 		accountConfig := &AccountConfig{
-			Address: fileAccountConfig.Address,
-			minCoin: minCoin,
+			Address:     fileAccountConfig.Address,
+			MinCoin:     minCoin,
+			TopUpAmount: topUpCoin,
+			RateLimit:   rateLimit,
 		}
 		accountConfigs = append(accountConfigs, accountConfig)
 
