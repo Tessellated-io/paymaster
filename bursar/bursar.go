@@ -19,6 +19,7 @@ import (
 )
 
 // Time between disbursement
+// TODO: Remove
 const disbursementCooldown = 1 * time.Hour
 
 // Dispenses funds
