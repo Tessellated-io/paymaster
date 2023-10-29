@@ -56,25 +56,28 @@ func (s *paymasterServer) Fund(ctx context.Context, req *proto.FundingRequest) (
 	fmt.Printf("💰 Received request for funds (address=%s, prefix=%s)\n", req.Address, req.AddressPrefix)
 
 	// Spawn a thread
-	go s.asyncFund(ctx, req)
+	err := s.asyncFund(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 
 	return &proto.FundingResponse{}, nil
 }
 
 // Use an async function that acquires a lock, then lets funds settle. This is slow, but fixes the question of nonce conflicts.
 // TODO: handle return value?
-func (s *paymasterServer) asyncFund(ctx context.Context, req *proto.FundingRequest) {
+func (s *paymasterServer) asyncFund(ctx context.Context, req *proto.FundingRequest) error {
 	// Lock
 	s.lock.Lock()
 	defer s.lock.Unlock()
-	fmt.Printf("💰 Aquired lock to send funds. Waiting for txs to settle. (address=%s, prefix=%s)\n", req.Address, req.AddressPrefix)
+	fmt.Printf("💰 Acquired lock to send funds. Waiting for txs to settle. (address=%s, prefix=%s)\n", req.Address, req.AddressPrefix)
 	time.Sleep(20 * time.Second) // like 3ish blocks
 	fmt.Printf("💰 Proceeding to process funds with txs settled. (address=%s, prefix=%s)\n", req.Address, req.AddressPrefix)
 
 	hash, err := s.bursar.SendFunds(req.Address, req.AddressPrefix)
 	if err != nil {
 		fmt.Printf("🛑 Failed to send funds: %s (address: %s)\n", err, req.Address)
-		return
+		return err
 	}
 	fmt.Printf("💰 Sent funds in hash %s (address=%s)\n", hash, req.Address)
 
@@ -84,5 +87,9 @@ func (s *paymasterServer) asyncFund(ctx context.Context, req *proto.FundingReque
 	if ok {
 		clientIP = p.Addr.String()
 	}
-	s.addressTracker.AddAddress(fmt.Sprintf("%s %s", req.Address, clientIP))
+	err = s.addressTracker.AddAddress(fmt.Sprintf("%s %s", req.Address, clientIP))
+	if err != nil {
+		return err
+	}
+	return nil
 }
