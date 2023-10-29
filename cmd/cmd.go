@@ -20,14 +20,17 @@ var rootCmd = &cobra.Command{
 		port, _ := cmd.Flags().GetInt("port")
 
 		mnemonic := "TODO"
-		keyPair := pacrypto.NewKeyPairFromMnemonic(mnemonic)
+		keyPair := pacrypto.NewCosmosKeyPairFromMnemonic(mnemonic)
 
 		cdc := codec.GetCodec()
 
 		offlineRegistry := chains.NewOfflineChainRegistry()
 		skipClient := skip.NewSkipClient(offlineRegistry, cdc)
 
-		addressTracker := tracker.NewAddressTracker("/home/ubuntu/paymaster.csv")
+		addressTracker, err := tracker.NewAddressTracker("/home/ubuntu/paymaster.csv")
+		if err != nil {
+			panic(err)
+		}
 		addressTracker.AddAddress("Test test")
 
 		bursar := bursar.NewBursar(

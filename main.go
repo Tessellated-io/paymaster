@@ -42,7 +42,7 @@ func main() {
 
 	// Get a signer
 	mnemonic := "TODO"
-	keyPair := pacrypto.NewKeyPairFromMnemonic(mnemonic)
+	keyPair := pacrypto.NewCosmosKeyPairFromMnemonic(mnemonic)
 
 	grpcRes, err := tx.SendMessages(
 		[]sdk.Msg{ibcXferMessage},
@@ -53,6 +53,8 @@ func main() {
 		txtypes.BroadcastMode_BROADCAST_MODE_SYNC,
 		"cosmos-validator.tessageo.net:9090",
 		1.1,
+		0.0, // TODO
+		"TODO",
 	)
 	if err != nil {
 		panic(err)

@@ -119,6 +119,8 @@ func (b *Bursar) SendFunds(targetAddress string, prefix string) (string, error) 
 		txtypes.BroadcastMode_BROADCAST_MODE_SYNC,
 		b.sourceChainGrpcUri,
 		1.1,
+		0.0, // TODO
+		"TODO",
 	)
 	if err != nil {
 		return "", err
