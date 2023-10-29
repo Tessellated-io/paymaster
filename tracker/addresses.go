@@ -10,14 +10,17 @@ type AddressTracker struct {
 	file      string
 }
 
-func NewAddressTracker(file string) *AddressTracker {
+func NewAddressTracker(file string) (*AddressTracker, error) {
 	a := &AddressTracker{
 		addresses: make(map[string]bool),
 		file:      file,
 	}
-	a.loadFromFile()
+	err := a.loadFromFile()
+	if err != nil {
+		return nil, err
+	}
 
-	return a
+	return a, nil
 }
 
 func (a *AddressTracker) AddAddress(address string) bool {
