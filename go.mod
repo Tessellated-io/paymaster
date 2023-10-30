@@ -7,7 +7,7 @@ require (
 	github.com/cosmos/ibc-go/v7 v7.2.1-0.20230829085526-4d114bd09096
 	github.com/gogo/protobuf v1.3.2
 	github.com/spf13/cobra v1.7.0
-	github.com/tessellated-io/pickaxe v1.0.10
+	github.com/tessellated-io/pickaxe v1.0.11
 	github.com/tessellated-io/router v0.0.3
 	google.golang.org/grpc v1.56.2
 	gopkg.in/yaml.v2 v2.4.0
@@ -134,5 +134,3 @@ require (
 	pgregory.net/rapid v0.5.5 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
-
-replace github.com/tessellated-io/pickaxe v1.0.10 => ../pickaxe
