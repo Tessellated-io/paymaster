@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/bursar"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/codec"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/server"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/skip"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/tracker"
+	"github.com/tessellated-io/paymaster/bursar"
+	"github.com/tessellated-io/paymaster/codec"
+	"github.com/tessellated-io/paymaster/server"
+	"github.com/tessellated-io/paymaster/skip"
+	"github.com/tessellated-io/paymaster/tracker"
 	"github.com/tessellated-io/pickaxe/chains"
 	pacrypto "github.com/tessellated-io/pickaxe/crypto"
 )
