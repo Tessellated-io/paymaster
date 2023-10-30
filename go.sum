@@ -570,8 +570,13 @@ github.com/tendermint/go-amino v0.16.0 h1:GyhmgQKvqF82e2oZeuMSp9JTN0N09emoSZlb2l
 github.com/tendermint/go-amino v0.16.0/go.mod h1:TQU0M1i/ImAo+tYpZi73AU3V/dKeCoMC9Sphe2ZwGME=
 github.com/tessellated-io/pickaxe v1.0.6 h1:qcEh33UxJ7rhqueOUrhnkuLDT00QV+ORxSV/cqgzv/M=
 github.com/tessellated-io/pickaxe v1.0.6/go.mod h1:pLlryjuiyWCG6P6bycabeqQEoAA7SY7IoDwLLASvjfw=
+<<<<<<< HEAD
 github.com/tessellated-io/router v0.0.3 h1:uNWNZ6SS8/hmVYkvjXBl+soOHP3cHdE43nn+2ZXTL0g=
 github.com/tessellated-io/router v0.0.3/go.mod h1:o3IxshdCRmmxNMmKa0Ej4/4ZR9NULhXm+ci0/814dKA=
+=======
+github.com/tessellated-io/router v0.0.2 h1:YCm0r0zKvb9E3bufjPalkWM9Z3VD9xZiGnHarjbxQJ4=
+github.com/tessellated-io/router v0.0.2/go.mod h1:o3IxshdCRmmxNMmKa0Ej4/4ZR9NULhXm+ci0/814dKA=
+>>>>>>> origin/main
 github.com/tidwall/btree v1.6.0 h1:LDZfKfQIBHGHWSwckhXI0RPSXzlo+KYdjK7FWSqOzzg=
 github.com/tidwall/btree v1.6.0/go.mod h1:twD9XRA5jj9VUQGELzDO4HPQTNJsoWWfYEL+EUQ2cKY=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
