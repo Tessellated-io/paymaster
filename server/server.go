@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tessellated-io/mail-in-rebates/paymaster/bursar"
-	proto "github.com/tessellated-io/mail-in-rebates/paymaster/server/proto"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/tracker"
+	"github.com/tessellated-io/paymaster/bursar"
+	proto "github.com/tessellated-io/paymaster/server/proto"
+	"github.com/tessellated-io/paymaster/tracker"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
 )

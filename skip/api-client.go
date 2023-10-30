@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	ibctypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/crypto"
+	"github.com/tessellated-io/paymaster/crypto"
 	"github.com/tessellated-io/pickaxe/chains"
 
 	cdc "github.com/cosmos/cosmos-sdk/codec"
