@@ -12,7 +12,7 @@ import (
 // Binary name
 const (
 	binaryName = "paymaster"
-	binaryIcon = "♻️" // TODO
+	binaryIcon = "💸"
 )
 
 // Version
