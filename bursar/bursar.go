@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tessellated-io/mail-in-rebates/paymaster/crypto"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/skip"
+	"github.com/tessellated-io/paymaster/crypto"
+	"github.com/tessellated-io/paymaster/skip"
 	"github.com/tessellated-io/pickaxe/arrays"
 	"github.com/tessellated-io/pickaxe/chains"
 	"github.com/tessellated-io/pickaxe/coding"

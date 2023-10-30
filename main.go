@@ -4,9 +4,9 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/tessellated-io/mail-in-rebates/paymaster/codec"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/crypto"
-	"github.com/tessellated-io/mail-in-rebates/paymaster/skip"
+	"github.com/tessellated-io/paymaster/codec"
+	"github.com/tessellated-io/paymaster/crypto"
+	"github.com/tessellated-io/paymaster/skip"
 	"github.com/tessellated-io/pickaxe/chains"
 	pacrypto "github.com/tessellated-io/pickaxe/crypto"
 	"github.com/tessellated-io/pickaxe/tx"

@@ -1,4 +1,4 @@
-module github.com/tessellated-io/mail-in-rebates/paymaster
+module github.com/tessellated-io/paymaster
 
 go 1.20
 

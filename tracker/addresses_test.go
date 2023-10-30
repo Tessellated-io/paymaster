@@ -3,7 +3,7 @@ package tracker_test
 import (
 	"testing"
 
-	"github.com/tessellated-io/mail-in-rebates/paymaster/tracker"
+	"github.com/tessellated-io/paymaster/tracker"
 )
 
 func TestFileWrite(t *testing.T) {
