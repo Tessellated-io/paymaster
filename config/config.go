@@ -2,9 +2,10 @@ package config
 
 import (
 	"context"
-	"log"
 	"time"
 
+	chainregistry "github.com/tessellated-io/pickaxe/cosmos/chain-registry"
+	"github.com/tessellated-io/pickaxe/log"
 	"github.com/tessellated-io/pickaxe/util"
 	r "github.com/tessellated-io/router/router"
 
@@ -68,8 +69,26 @@ func GetConfig(ctx context.Context, filename string, log *log.Logger) (*GlobalCo
 		}
 		accountConfigs = append(accountConfigs, accountConfig)
 
+		// TODO: hit cache for a chain client
+		// TODO: hit cache for a chain config?
+		registryClient := chainregistry.NewRegistryClient(log)
+		chainName, err := registryClient.ChainNameForChainID(ctx, fileAccountConfig.ChainID)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+
+		registryChainInfo, err := registryClient.GetChainInfo(ctx, chainName)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+
 		// Create and add chain to router
-		chain, err := r.NewChain(fileAccountConfig.ChainID, fileAccountConfig.ChainID, &fileAccountConfig.Grpc)
+		chain, err := r.NewChain(
+			fileAccountConfig.ChainID,
+			fileAccountConfig.ChainID, // TODO: use a name here when we have chain registry
+			registryChainInfo.Bech32Prefix,
+			&fileAccountConfig.Grpc,
+		)
 		if err != nil {
 			return nil, nil, nil, err
 		}
