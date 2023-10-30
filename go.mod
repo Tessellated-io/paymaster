@@ -8,7 +8,7 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/spf13/cobra v1.7.0
 	github.com/tessellated-io/pickaxe v1.0.6
-	github.com/tessellated-io/router v0.0.2
+	github.com/tessellated-io/router v0.0.3
 	google.golang.org/grpc v1.56.2
 )
 
@@ -131,5 +131,3 @@ require (
 	pgregory.net/rapid v0.5.5 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
-
-replace github.com/tessellated-io/router v0.0.2 => ../router

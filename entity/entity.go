@@ -28,7 +28,7 @@ func NewEntity(signer crypto.BytesSigner, chain router.Chain) (Entity, error) {
 	}, nil
 }
 
-// Entity Interace
+// Entity Interacted
 
 func (e *entity) Address() string {
 	prefix := e.chain.Bech32Prefix()
