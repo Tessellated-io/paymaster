@@ -1,13 +1,13 @@
 module github.com/tessellated-io/paymaster
 
-go 1.20
+go 1.21.0
 
 require (
 	github.com/cosmos/cosmos-sdk v0.47.4
 	github.com/cosmos/ibc-go/v7 v7.2.1-0.20230829085526-4d114bd09096
 	github.com/gogo/protobuf v1.3.2
 	github.com/spf13/cobra v1.7.0
-	github.com/tessellated-io/pickaxe v1.0.11
+	github.com/tessellated-io/pickaxe v1.2.4
 	github.com/tessellated-io/router v0.0.3
 	google.golang.org/grpc v1.56.2
 	gopkg.in/yaml.v2 v2.4.0
